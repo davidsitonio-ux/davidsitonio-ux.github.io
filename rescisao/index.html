@@ -200,6 +200,8 @@ input:focus,select:focus{border-color:var(--dourado);outline:none;box-shadow:0 0
 .invalido.consent{border-color:var(--erro)}
 .acoes{display:grid;gap:.7rem;margin-top:.4rem}
 .btn-wa svg{width:22px;height:22px;flex:none}
+.btn-wa{background:#25D366;color:#1F1F1F}
+.btn-wa:hover{background:#1FBE5A}
 .salvo{font-size:.85rem;color:var(--tinta-suave);margin:.9rem 0 0}
 .recuperado{display:none;background:var(--papel);border-radius:6px;padding:.7rem .9rem;font-size:.9rem;margin-bottom:1.2rem}
 .recuperado button{background:none;border:0;padding:0;font:inherit;color:var(--dourado-texto);text-decoration:underline;cursor:pointer}
@@ -228,6 +230,12 @@ footer .legal{font-size:.84rem;color:#A9A59E;margin-top:1.2rem;border-top:1px so
   transform:translateY(110%);transition:transform .25s ease}
 .barra.mostrar{transform:none}
 .barra .btn{max-width:var(--largura);margin:0 auto;display:flex}
+.barra-in{max-width:var(--largura);margin:0 auto;display:flex;gap:.6rem}
+.barra-in .btn{flex:1;margin:0;max-width:none}
+.btn-wa-sq{flex:none;width:3.25rem;min-height:3.25rem;border-radius:6px;background:#25D366;color:#1F1F1F;display:flex;align-items:center;justify-content:center}
+.btn-wa-sq svg{width:26px;height:26px}
+.direto{font-size:.95rem;margin:1rem 0 0;text-align:center}
+.direto a{font-weight:600}
 .cookies{position:fixed;left:.75rem;right:.75rem;bottom:calc(.75rem + env(safe-area-inset-bottom,0px));z-index:30;background:var(--branco);
   border:1px solid var(--linha);border-radius:10px;padding:1rem;box-shadow:0 6px 24px rgba(0,0,0,.18);font-size:.9rem;max-width:34rem;margin:0 auto;display:none}
 .cookies.mostrar{display:block}
@@ -484,6 +492,8 @@ footer .legal{font-size:.84rem;color:#A9A59E;margin-top:1.2rem;border-top:1px so
 
       <div class="aviso-ok" id="avisoOk" role="status" aria-live="polite"></div>
 
+      <p class="direto">Prefere conversar direto? <a href="https://wa.me/5583987293304" data-direto="formulario">Fale com o advogado pelo WhatsApp</a>.</p>
+
       <p class="salvo">Enquanto você preenche, as respostas ficam guardadas só neste aparelho, para não se perderem se a conexão cair. Elas são apagadas depois do envio.</p>
     </form>
   </div>
@@ -527,7 +537,7 @@ footer .legal{font-size:.84rem;color:#A9A59E;margin-top:1.2rem;border-top:1px so
     <p>David Sitônio Advocacia e Consultoria Jurídica</p>
     <p>David Xavier Sitônio Lucena, OAB/PB 13.937</p>
     <p>João Pessoa/PB<br>
-       <a href="https://wa.me/5583987293304" data-wa="rodape">(83) 98729-3304</a><br>
+       <a href="https://wa.me/5583987293304" data-direto="rodape">(83) 98729-3304</a><br>
        <a href="mailto:david_sitonio@hotmail.com">david_sitonio@hotmail.com</a></p>
     <!-- Endereço do escritório (opcional): <p>Rua ..., nº ..., bairro, João Pessoa/PB</p> -->
     <p><a href="privacidade.html">Política de Privacidade</a> &nbsp; <a href="#" id="revCookies">Preferências de cookies</a></p>
@@ -537,7 +547,10 @@ footer .legal{font-size:.84rem;color:#A9A59E;margin-top:1.2rem;border-top:1px so
 
 <!-- Barra fixa no celular -->
 <div class="barra" id="barra" aria-hidden="true">
-  <a class="btn" href="#verificador" data-cta="barra" tabindex="-1">Conferir minhas verbas</a>
+  <div class="barra-in">
+    <a class="btn" href="#verificador" data-cta="barra" tabindex="-1">Conferir minhas verbas</a>
+    <a class="btn-wa-sq" href="https://wa.me/5583987293304" data-direto="barra" tabindex="-1" aria-label="Falar direto com o advogado pelo WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.8-1.2.2-.6.2-1.1.1-1.2l-.5-.2Z"/></svg></a>
+  </div>
 </div>
 
 <!-- Aviso de cookies -->
@@ -635,6 +648,21 @@ footer .legal{font-size:.84rem;color:#A9A59E;margin-top:1.2rem;border-top:1px so
   });
   document.querySelectorAll('[data-wa]').forEach(function(a){
     a.addEventListener('click', function(){ evento('whatsapp_click', { location: a.getAttribute('data-wa') }); });
+  });
+
+  /* ---------- WhatsApp direto (sem formulário) ----------
+     Evento whatsapp_direto no GA4. NÃO conta como conversão no Google Ads. */
+  document.querySelectorAll('[data-direto]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      evento('whatsapp_direto', { location: a.getAttribute('data-direto'), page: 'rescisao' });
+      var origem = utm.utm_source
+        ? [utm.utm_source, utm.utm_medium, utm.utm_campaign].filter(Boolean).join(' / ') + (utm.utm_term ? ' (termo: ' + utm.utm_term + ')' : '')
+        : 'acesso direto';
+      var msg = 'Olá, Dr. David! Vim pela página sobre verbas rescisórias e prefiro conversar direto.\n\n_Origem: ' + origem + '_';
+      var url = 'https://wa.me/' + CONFIG.whatsapp + '?text=' + encodeURIComponent(msg);
+      setTimeout(function(){ window.location.href = url; }, 300);
+    });
   });
 
   /* =====================================================================
