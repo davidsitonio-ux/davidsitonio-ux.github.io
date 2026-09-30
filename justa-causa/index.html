@@ -396,9 +396,9 @@ footer .legal{font-size:.84rem;color:#A9A59E;margin-top:1.2rem;border-top:1px so
 
       <div class="campo" data-campo="data">
         <label for="data">Data da demissão</label>
-        <input type="date" id="data" name="data" required>
+        <input type="text" id="data" name="data" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" autocomplete="off" required>
         <span class="ajuda">Se não lembrar o dia exato, informe uma data aproximada.</span>
-        <span class="erro">Informe a data da demissão (não pode ser uma data futura).</span>
+        <span class="erro">Informe a data no formato dd/mm/aaaa (não pode ser uma data futura).</span>
       </div>
 
       <div class="campo" data-campo="motivo">
@@ -637,8 +637,23 @@ footer .legal{font-size:.84rem;color:#A9A59E;margin-top:1.2rem;border-top:1px so
   /* ---------- Campos ---------- */
   var hoje = new Date();
   function iso(d){ return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
-  $('data').max = iso(hoje);
-  $('data').min = iso(new Date(hoje.getFullYear() - 10, hoje.getMonth(), hoje.getDate()));
+  var DATA_MIN = iso(new Date(hoje.getFullYear() - 10, hoje.getMonth(), hoje.getDate()));
+
+  /* Data no formato dd/mm/aaaa, com as barras inseridas automaticamente */
+  $('data').addEventListener('input', function(){
+    var d = this.value.replace(/\D/g, '').slice(0, 8), f = d;
+    if (d.length > 4) f = d.slice(0,2) + '/' + d.slice(2,4) + '/' + d.slice(4);
+    else if (d.length > 2) f = d.slice(0,2) + '/' + d.slice(2);
+    this.value = f;
+  });
+  function paraIso(v){
+    var m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(v || '');
+    if (!m) return '';
+    var dt = new Date(+m[3], +m[2] - 1, +m[1]);
+    if (dt.getFullYear() !== +m[3] || dt.getMonth() !== +m[2] - 1 || dt.getDate() !== +m[1]) return '';
+    return m[3] + '-' + m[2] + '-' + m[1];
+  }
+  function deIso(v){ var p = (v || '').split('-'); return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : ''; }
 
   $('whats').addEventListener('input', function(){
     var d = this.value.replace(/\D/g, '').slice(0, 11), f = d;
@@ -656,7 +671,7 @@ footer .legal{font-size:.84rem;color:#A9A59E;margin-top:1.2rem;border-top:1px so
     return {
       nome: $('nome').value.trim(),
       whats: $('whats').value.trim(),
-      data: $('data').value,
+      data: paraIso($('data').value),
       motivo: $('motivo').value,
       motivoOutro: $('motivoOutro').value.trim(),
       advertencias: radio('advertencias'),
@@ -675,7 +690,7 @@ footer .legal{font-size:.84rem;color:#A9A59E;margin-top:1.2rem;border-top:1px so
       var r = JSON.parse(bruto);
       if (!r.t || Date.now() - r.t > VALIDADE) { ls('del', RASCUNHO); return; }
       var d = r.d || {}, algo = false;
-      ['nome','whats','data','motivo','motivoOutro'].forEach(function(k){ if (d[k]) { $(k).value = d[k]; algo = true; } });
+      ['nome','whats','data','motivo','motivoOutro'].forEach(function(k){ if (d[k]) { $(k).value = k === 'data' ? deIso(d[k]) : d[k]; algo = true; } });
       ['advertencias','tempo'].forEach(function(k){
         if (d[k]) { var el = form.querySelector('input[name="' + k + '"][value="' + d[k] + '"]'); if (el) { el.checked = true; algo = true; } }
       });
@@ -702,7 +717,7 @@ footer .legal{font-size:.84rem;color:#A9A59E;margin-top:1.2rem;border-top:1px so
     chk('nome', d.nome.length >= 2);
     var dig = d.whats.replace(/\D/g, '');
     chk('whats', dig.length === 10 || dig.length === 11);
-    chk('data', !!d.data && d.data <= iso(new Date()));
+    chk('data', !!d.data && d.data <= iso(new Date()) && d.data >= DATA_MIN);
     chk('motivo', !!d.motivo && (d.motivo !== 'Outro' || d.motivoOutro.length >= 3));
     chk('advertencias', !!d.advertencias);
     chk('tempo', !!d.tempo);
