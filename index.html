@@ -246,15 +246,6 @@ footer{position:relative;overflow:hidden}
 .contatos .sep{color:rgba(187,134,70,.7);margin:0 .6rem}
 
 /* Barra fixa (celular) e aviso de cookies */
-.barra{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(18,18,18,.96);padding:.7rem 1rem calc(.7rem + env(safe-area-inset-bottom,0px));
-  transform:translate3d(0,110%,0);transition:transform .2s ease-out;will-change:transform;contain:layout paint;
-  -webkit-backface-visibility:hidden;backface-visibility:hidden}
-.barra.mostrar{transform:translate3d(0,0,0)}
-.barra .btn{max-width:var(--largura);margin:0 auto;display:flex}
-.barra-in{max-width:var(--largura);margin:0 auto;display:flex;gap:.6rem}
-.barra-in .btn{flex:1;margin:0;max-width:none}
-.btn-wa-sq{flex:none;width:3.25rem;min-height:3.25rem;border-radius:6px;background:#25D366;color:#FFFFFF;border:1px solid #E2C27A;box-shadow:0 2px 6px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center}
-.btn-wa-sq svg{width:26px;height:26px}
 .direto{font-size:.95rem;margin:1rem 0 0;text-align:center}
 .direto a{font-weight:600}
 .cookies{position:fixed;left:.75rem;right:.75rem;bottom:calc(.75rem + env(safe-area-inset-bottom,0px));z-index:30;background:var(--branco);
@@ -263,7 +254,6 @@ footer{position:relative;overflow:hidden}
 .cookies p{margin:0 0 .8rem}
 .cookies .botoes{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
 .cookies .btn{min-height:2.75rem;font-size:.95rem;padding:.5rem}
-@media (prefers-reduced-motion:reduce){.barra{transition:none}}
 
 @media (min-width:720px){
   body{font-size:1.125rem}
@@ -273,8 +263,7 @@ footer{position:relative;overflow:hidden}
   .hero .nota{text-align:left}
   .acoes{grid-template-columns:auto auto;justify-content:start}
   .cartao{padding:2rem}
-  .barra{display:none}
-  footer{padding-bottom:2.5rem}
+  footer{padding-bottom:6rem}
 }
 
 /* ===== Página geral ===== */
@@ -287,6 +276,20 @@ footer{position:relative;overflow:hidden}
 .hero .avatar{width:2.6rem;height:2.6rem}
 .form-sec{padding-top:0}
 .form-sec .cartao{margin-top:-3.5rem;padding-top:1.05rem;position:relative;z-index:2;box-shadow:0 10px 30px rgba(0,0,0,.28)}
+/* Botão flutuante de dúvidas (mesmo do formulário completo) */
+.duvida-fab{position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:25;display:flex;align-items:center;gap:10px;
+  background:#141414;color:#FFFFFF;border:1px solid rgba(187,134,70,.75);border-radius:99px;padding:11px 15px 11px 13px;
+  font-family:var(--serif);font-weight:600;font-size:1rem;line-height:1.15;letter-spacing:.02em;text-decoration:none;
+  box-shadow:0 6px 18px rgba(0,0,0,.35);transition:bottom .2s ease}
+.duvida-fab[hidden]{display:none}
+.duvida-fab.compacto{padding:12px}
+.duvida-fab.compacto .fab-txt,.duvida-fab.compacto .fab-seta{display:none}
+.duvida-fab.compacto > svg:first-child{width:30px;height:30px}
+.duvida-fab:hover{filter:brightness(1.12)}
+.duvida-fab > svg:first-child{width:26px;height:26px;flex:none;color:#25D366}
+.duvida-fab .fab-seta{width:18px;height:18px;flex:none;color:var(--dourado);fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.duvida-fab .fab-txt small{display:block;font-family:var(--sans);font-weight:500;font-size:.72rem;letter-spacing:.03em;color:var(--dourado-claro);margin-top:1px}
+@media (prefers-reduced-motion:reduce){.duvida-fab{transition:none}}
 /* Aviso de cookies em faixa baixa, para não cobrir os cartões */
 .cookies{left:0;right:0;bottom:0;max-width:none;margin:0;border:0;border-top:1px solid var(--linha);border-radius:0;
   padding:.55rem .9rem calc(.55rem + env(safe-area-inset-bottom,0px));box-shadow:0 -4px 18px rgba(0,0,0,.14)}
@@ -495,7 +498,7 @@ footer{position:relative;overflow:hidden}
         <div class="aviso-ok" id="avisoOk" role="status" aria-live="polite"></div>
       </div>
 
-      <p class="direto">Prefere conversar direto? <a href="https://wa.me/5583996451913" data-direto="formulario">Fale com o advogado pelo WhatsApp</a>.</p>
+      <p class="direto">Prefere conversar direto? <a href="https://wa.me/5583996451913?text=Ol%C3%A1%2C%20Dr.%20David%21%20Vim%20pela%20p%C3%A1gina%20do%20escrit%C3%B3rio%20e%20prefiro%20conversar%20direto." data-direto="formulario">Fale com o advogado pelo WhatsApp</a>.</p>
 
       <p class="salvo" id="salvoTxt"></p>
     </form>
@@ -602,6 +605,7 @@ footer{position:relative;overflow:hidden}
       <summary>Como consulto meu FGTS?</summary>
       <p>Pelo aplicativo FGTS, da Caixa. O extrato mostra os depósitos mês a mês e ajuda a identificar meses em que a empresa não depositou.</p>
     </details>
+    <a class="btn" href="#formulario" data-cta="fim" style="margin-top:1.8rem">Contar minha situação <svg class="seta" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
   </div>
 </section>
 </main>
@@ -617,7 +621,7 @@ footer{position:relative;overflow:hidden}
       <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 13h18"/></svg><span>David Sitônio Advocacia e Consultoria Jurídica</span></li>
       <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span>David Xavier Sitônio Lucena, OAB/PB 13.937</span></li>
       <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg><span>João Pessoa/PB · atendimento on-line em toda a Paraíba</span></li>
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg><a href="https://wa.me/5583996451913" data-direto="rodape">(83) 99645-1913</a></li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg><a href="https://wa.me/5583996451913?text=Ol%C3%A1%2C%20Dr.%20David%21%20Vim%20pela%20p%C3%A1gina%20do%20escrit%C3%B3rio%20e%20prefiro%20conversar%20direto." data-direto="rodape">(83) 99645-1913</a></li>
       <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><a href="mailto:david_sitonio@hotmail.com">david_sitonio@hotmail.com</a></li>
       <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg><span><a href="privacidade.html">Política de Privacidade</a><span class="sep">|</span><a href="#" id="revCookies">Preferências de cookies</a></span></li>
     </ul>
@@ -625,13 +629,12 @@ footer{position:relative;overflow:hidden}
   </div>
 </footer>
 
-<!-- Barra fixa no celular -->
-<div class="barra" id="barra" aria-hidden="true">
-  <div class="barra-in">
-    <a class="btn" href="#formulario" data-cta="barra" tabindex="-1">Contar minha situação <svg class="seta" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-    <a class="btn-wa-sq" href="https://wa.me/5583996451913" data-direto="barra" tabindex="-1" aria-label="Falar direto com o advogado pelo WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.8-1.2.2-.6.2-1.1.1-1.2l-.5-.2Z"/></svg></a>
-  </div>
-</div>
+<!-- Botão flutuante de WhatsApp: fica sempre na tela (igual ao do formulário completo).
+     Enquanto o formulário está na tela ele encolhe para só o ícone, para não cobrir as opções. -->
+<a class="duvida-fab compacto" id="fab" href="https://wa.me/5583996451913?text=Ol%C3%A1%2C%20Dr.%20David%21%20Estou%20na%20p%C3%A1gina%20do%20escrit%C3%B3rio%20e%20tenho%20uma%20d%C3%BAvida." data-direto="flutuante" aria-label="Ficou com dúvida? Fale com o advogado pelo WhatsApp">
+  <svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16 2.9C8.8 2.9 3 8.7 3 15.9c0 2.3.6 4.5 1.7 6.4L3 29.1l7-1.7c1.8 1 3.9 1.6 6 1.6 7.2 0 13-5.8 13-13S23.2 2.9 16 2.9zm0 23.7c-1.9 0-3.8-.5-5.4-1.5l-.4-.2-4.1 1 1.1-4-.3-.4c-1.1-1.7-1.6-3.6-1.6-5.6 0-5.9 4.8-10.7 10.7-10.7s10.7 4.8 10.7 10.7-4.8 10.7-10.7 10.7zm5.9-8c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.6-1.6-1-.9-1.6-1.9-1.8-2.3-.2-.3 0-.5.1-.6.1-.1.3-.4.5-.5.2-.2.2-.3.3-.5.1-.2 0-.4 0-.6-.1-.2-.7-1.8-1-2.4-.3-.6-.5-.5-.7-.6h-.6c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.7s1.2 3.2 1.3 3.4c.2.2 2.3 3.5 5.5 4.9.8.3 1.4.5 1.9.7.8.2 1.5.2 2.1.1.6-.1 1.9-.8 2.2-1.6.3-.8.3-1.4.2-1.6-.1-.1-.3-.2-.6-.4z"/></svg>
+  <span class="fab-txt">Ficou com dúvida?<small>Fale com o advogado</small></span><svg class="fab-seta" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+</a>
 
 <!-- Aviso de cookies -->
 <div class="cookies" id="cookies" role="dialog" aria-label="Aviso de cookies">
@@ -760,30 +763,34 @@ footer{position:relative;overflow:hidden}
       gtag('consent', 'update', { ad_storage:'denied', analytics_storage:'denied', ad_user_data:'denied', ad_personalization:'denied' });
     }
     ck.classList.remove('mostrar');
-    atualizarBarra();
+    atualizarFab();
   }
   if (!ls('get', 'ds_consent')) ck.classList.add('mostrar');
   $('ckAceitar').addEventListener('click', function(){ decidirCookies(true); });
   $('ckRecusar').addEventListener('click', function(){ decidirCookies(false); });
-  $('revCookies').addEventListener('click', function(e){ e.preventDefault(); ck.classList.add('mostrar'); atualizarBarra(); });
+  $('revCookies').addEventListener('click', function(e){ e.preventDefault(); ck.classList.add('mostrar'); atualizarFab(); });
 
-  /* ---------- Barra fixa no celular ---------- */
-  var barra = $('barra'), barraVisivel = false, heroVisivel = true, formVisivel = false;
-  function atualizarBarra(){
-    var mostrar = !heroVisivel && !formVisivel && !ck.classList.contains('mostrar');
-    if (mostrar === barraVisivel) return;   // evita repintar sem necessidade
-    barraVisivel = mostrar;
-    requestAnimationFrame(function(){
-      barra.classList.toggle('mostrar', mostrar);
-      barra.setAttribute('aria-hidden', mostrar ? 'false' : 'true');
-    });
+  /* ---------- Botão flutuante de WhatsApp ----------
+     Fica sempre na tela. Regras:
+     - formulário na tela: encolhe para só o ícone, para não cobrir as opções;
+     - resto da página: aparece inteiro, com o texto;
+     - aviso de cookies aberto: sobe para cima dele;
+     - passo 3: some, para não ser confundido com o botão "Enviar pelo
+       WhatsApp" (que leva as respostas e conta a conversão).
+     Para deixá-lo sempre inteiro, troque SEMPRE_INTEIRO para true. */
+  var SEMPRE_INTEIRO = false;
+  var fab = $('fab'), formNaTela = true;
+  function atualizarFab(){
+    fab.style.bottom = ck.classList.contains('mostrar') ? (ck.offsetHeight + 12) + 'px' : '';
+    fab.hidden = estado.etapa === 3;
+    fab.classList.toggle('compacto', formNaTela && !SEMPRE_INTEIRO);
   }
   if ('IntersectionObserver' in window) {
-    new IntersectionObserver(function(en){ heroVisivel = en[0].isIntersecting; atualizarBarra(); })
-      .observe(document.querySelector('.hero'));
-    new IntersectionObserver(function(en){ formVisivel = en[0].isIntersecting; atualizarBarra(); }, { rootMargin: '0px 0px -30% 0px' })
-      .observe($('formulario'));
-  }
+    new IntersectionObserver(function(en){ formNaTela = en[0].isIntersecting; atualizarFab(); }, { rootMargin: '-25% 0px -15% 0px' })
+      .observe(form);
+  } else { formNaTela = false; }
+  window.addEventListener('resize', atualizarFab);
+  atualizarFab();
   function suave(){ try { return !window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch(e){ return true; } }
   document.querySelectorAll('[data-cta]').forEach(function(a){
     a.addEventListener('click', function(e){
@@ -798,14 +805,26 @@ footer{position:relative;overflow:hidden}
   });
 
   /* ---------- WhatsApp direto (sem formulário) ----------
-     Evento whatsapp_direto no GA4. NÃO conta como conversão no Google Ads. */
+     Evento whatsapp_direto no GA4. NÃO conta como conversão no Google Ads.
+     A mensagem fica escrita no próprio link (não depende de o script abrir
+     o WhatsApp): saudação + situação já marcada (se não for tema sensível)
+     + origem da visita. */
+  function msgDireta(local){
+    var s = sitAtual();
+    var m = local === 'flutuante'
+      ? 'Olá, Dr. David! Estou na página do escritório e tenho uma dúvida.'
+      : 'Olá, Dr. David! Vim pela página do escritório e prefiro conversar direto.';
+    if (s && s.titulo && !s.sensivel && s.id !== 'outra') m += '\n\n*Situação:* ' + s.titulo;
+    return m + '\n\n_Origem: ' + origem() + '_';
+  }
+  function atualizarDiretos(){
+    document.querySelectorAll('[data-direto]').forEach(function(a){
+      a.href = 'https://wa.me/' + CONFIG.whatsapp + '?text=' + encodeURIComponent(msgDireta(a.getAttribute('data-direto')));
+    });
+  }
   document.querySelectorAll('[data-direto]').forEach(function(a){
-    a.addEventListener('click', function(e){
-      e.preventDefault();
+    a.addEventListener('click', function(){
       evento('whatsapp_direto', { location: a.getAttribute('data-direto'), page: FORM_NAME });
-      var msg = 'Olá, Dr. David! Vim pela página do escritório e prefiro conversar direto.\n\n_Origem: ' + origem() + '_';
-      var url = 'https://wa.me/' + CONFIG.whatsapp + '?text=' + encodeURIComponent(msg);
-      setTimeout(function(){ window.location.href = url; }, 300);
     });
   });
 
@@ -831,7 +850,7 @@ footer{position:relative;overflow:hidden}
     var mudou = estado.sit !== id;
     estado.sit = id;
     marcarCartao();
-    if (mudou) { montarEtapa2(); $('lgpdSens').checked = false; }
+    if (mudou) { montarEtapa2(); $('lgpdSens').checked = false; atualizarDiretos(); }
     if (!formIniciado) { formIniciado = true; evento('form_start', { form_name: FORM_NAME }); }
     evento('form_step', { form_name: FORM_NAME, step: 1, step_name: 'situacao', situacao: sitGA() });
     salvar();
@@ -963,7 +982,7 @@ footer{position:relative;overflow:hidden}
   function limparTudo(){
     ls('del', RASCUNHO);
     form.reset();
-    estado.sit = ''; marcarCartao();
+    estado.sit = ''; marcarCartao(); atualizarDiretos();
     $('especificas').innerHTML = '';
     $('recuperado').style.display = 'none';
     $('avisoOk').classList.remove('mostrar');
@@ -982,6 +1001,7 @@ footer{position:relative;overflow:hidden}
     estado.etapa = n;
     [1, 2, 3].forEach(function(i){ $('etapa' + i).hidden = i !== n; });
     $('voltar').hidden = n === 1;
+    atualizarFab();
     $('progTxt').textContent = 'Passo ' + n + ' de 3';
     $('progBarra').setAttribute('aria-valuenow', String(n));
     $('progBarra').querySelectorAll('span').forEach(function(sp, i){ sp.classList.toggle('feito', i < n); });
@@ -1145,6 +1165,7 @@ footer{position:relative;overflow:hidden}
   /* Se a página foi recarregada no meio do formulário, o histórico pode trazer um passo antigo */
   try { if (history.state && history.state.etapa) history.replaceState(null, ''); } catch(e){}
   restaurar();
+  atualizarDiretos();
 })();
 </script>
 </body>
