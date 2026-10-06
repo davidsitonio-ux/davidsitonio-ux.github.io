@@ -308,6 +308,7 @@ footer{position:relative;overflow:hidden}
 .resultado li{margin-bottom:.25rem}
 .resultado .ressalva{font-size:.86rem;margin:.6rem 0 1rem}
 .verif .acoes-v{display:grid;gap:.6rem}
+.verif .acoes-v[hidden]{display:none}
 @media (min-width:720px){.verif{padding:2rem}.verif .acoes-v{grid-template-columns:auto auto;justify-content:start}}
 
 </style>
@@ -649,7 +650,7 @@ footer{position:relative;overflow:hidden}
   }
   function atualizarBarra(){
     posicionarBarra();
-    var mostrar = !heroVisivel && !formVisivel;
+    var mostrar = !heroVisivel && !formVisivel && !verifVisivel;
     if (mostrar === barraVisivel) return;   // evita repintar sem necessidade
     barraVisivel = mostrar;
     requestAnimationFrame(function(){
@@ -662,6 +663,10 @@ footer{position:relative;overflow:hidden}
       .observe(document.querySelector('.hero .btn'));
     new IntersectionObserver(function(en){ formVisivel = en[0].isIntersecting; atualizarBarra(); }, { rootMargin: '0px 0px -30% 0px' })
       .observe($('formulario'));
+  }
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function(en){ verifVisivel = en[0].isIntersecting; atualizarBarra(); }, { rootMargin: '-20% 0px -30% 0px' })
+      .observe(document.querySelector('.verif'));
   }
   window.addEventListener('resize', posicionarBarra);
   posicionarBarra();
@@ -784,6 +789,7 @@ footer{position:relative;overflow:hidden}
   });
   $('vChecks').addEventListener('change', function(){ if (vResultadoVisto) mostrarResultado(); });
   $('vVer').addEventListener('click', function(){
+    if (!vTipo || vTipo === 'jc') return;   // sem tipo de saída não há resultado a mostrar
     vResultadoVisto = true;
     mostrarResultado();
     evento('verificador_result', { tipo: vTipo, itens_faltando: faltando().length });
