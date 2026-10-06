@@ -244,7 +244,7 @@ footer{position:relative;overflow:hidden}
 .contatos .sep{color:rgba(187,134,70,.7);margin:0 .6rem}
 
 /* Barra fixa (celular) e aviso de cookies */
-.barra{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(18,18,18,.96);padding:.7rem 1rem calc(.7rem + env(safe-area-inset-bottom,0px));
+.barra{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#121212;padding:.7rem 1rem calc(.7rem + env(safe-area-inset-bottom,0px));
   transform:translate3d(0,110%,0);transition:transform .2s ease-out;will-change:transform;contain:layout paint;
   -webkit-backface-visibility:hidden;backface-visibility:hidden}
 .barra.mostrar{transform:translate3d(0,0,0)}
@@ -274,7 +274,7 @@ footer{position:relative;overflow:hidden}
 .resultado.mostrar{display:block}
 .resultado ul{margin:.4rem 0 .8rem;padding-left:1.2rem}
 .resultado li{margin-bottom:.25rem}
-.resultado .ressalva{font-size:.86rem;margin:.6rem 0 1rem}
+.resultado .ressalva{font-size:.86rem;margin:.9rem 0 0}
 /* Botão de reserva depois do envio, se o WhatsApp não abrir sozinho */
 .aviso-ok .abrir-wa{display:flex;width:100%;margin:.8rem 0 .5rem;color:#1F1F1F;text-decoration:none}
 @media (prefers-reduced-motion:reduce){.barra{transition:none}}
@@ -354,9 +354,11 @@ footer{position:relative;overflow:hidden}
 .pular[hidden]{display:none}
 .aviso-jc p{margin:0 0 .8rem}
 .aviso-jc .btn{margin:0 0 .5rem}
-.resultado .btn{margin-top:.2rem}
+.resultado .btn{margin-top:.9rem}
+.resultado .fecho{margin:0;text-align:left}
 #vResumoForm{display:block}
 #vResumoForm[hidden]{display:none}
+#vVer[hidden]{display:none}
 
 @media (min-width:720px){
   body{font-size:1.125rem}
@@ -878,17 +880,19 @@ footer{position:relative;overflow:hidden}
     var html;
     if (f.length) {
       r.classList.remove('ok');
-      html = '<strong>Nesse tipo de saída, estes itens costumam ser devidos e não foram marcados:</strong><ul>' +
-        f.map(function(x){ return '<li>' + x + '</li>'; }).join('') + '</ul>Vale conferir com atenção.';
+      html = '<strong>Resultado: ' + (f.length === 1
+          ? 'você não marcou 1 item que costuma ser devido nesse tipo de saída:'
+          : 'você não marcou ' + f.length + ' itens que costumam ser devidos nesse tipo de saída:') + '</strong><ul>' +
+        f.map(function(x){ return '<li>' + x + '</li>'; }).join('') + '</ul><p class="fecho">Na análise, o advogado confere esses pontos com você.</p>';
     } else {
       r.classList.add('ok');
-      html = '<strong>Pelos itens marcados, sua rescisão parece incluir o que costuma ser devido.</strong><br>Se tiver dúvida sobre valores, horas extras ou outros pontos, você pode enviar as informações para análise.';
+      html = '<strong>Pelos itens marcados, sua rescisão parece incluir o que costuma ser devido.</strong><p class="fecho">Se tiver dúvida sobre valores, horas extras ou outros pontos, você pode enviar as informações para análise.</p>';
     }
-    html += '<p class="ressalva">Este verificador é apenas informativo. Ele não calcula valores e não substitui a análise do seu caso: convenção coletiva, acordos e outros detalhes podem mudar o resultado.</p>' +
-      '<button type="button" class="btn" id="vEnviar">Enviar para análise <svg class="seta" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>';
+    html += '<button type="button" class="btn" id="vEnviar">Enviar para análise <svg class="seta" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>' +
+      '<p class="ressalva">Este verificador é apenas informativo. Ele não calcula valores e não substitui a análise do seu caso: convenção coletiva, acordos e outros detalhes podem mudar o resultado.</p>';
     r.innerHTML = html;
     r.classList.add('mostrar');
-    $('vPular').hidden = true;   // depois do resultado, o caminho é o botão "Enviar para análise"
+    $('vVer').hidden = true; $('vPular').hidden = true;   // depois do resultado, o caminho é o botão "Enviar para análise"
     $('vEnviar').addEventListener('click', function(){
       evento('cta_click', { location: 'verificador_resultado' });
       avancarPara3('resultado');
@@ -899,7 +903,7 @@ footer{position:relative;overflow:hidden}
     vResultadoVisto = false;
     $('vResultado').classList.remove('mostrar');
     $('vResultado').innerHTML = '';
-    $('vPular').hidden = false;
+    $('vPular').hidden = false; $('vVer').hidden = false;
   }
   /* Linhas de resumo no topo dos passos 2 e 3 */
   function atualizarResumo(){
@@ -974,7 +978,7 @@ footer{position:relative;overflow:hidden}
     mostrarResultado();
     salvar();
     evento('verificador_result', { tipo: vTipo, itens_faltando: faltando().length });
-    $('vResultado').scrollIntoView({ behavior: suave() ? 'smooth' : 'auto', block: 'nearest' });
+    $('vResultado').scrollIntoView({ behavior: suave() ? 'smooth' : 'auto', block: 'start' });
   });
 
   /* ---------- Rascunho no aparelho (a autorização LGPD não é salva) ---------- */
