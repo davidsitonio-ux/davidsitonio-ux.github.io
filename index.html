@@ -111,7 +111,9 @@ a{color:var(--dourado-texto)}
 h1,h2,h3{font-family:var(--serif);font-weight:600;line-height:1.15;margin:0 0 .6em;color:var(--grafite)}
 h2{font-size:1.9rem}
 h3{font-size:1.3rem}
-p{margin:0 0 1em;text-align:justify;-webkit-hyphens:auto;hyphens:auto}
+/* No celular, parágrafos alinhados à esquerda, sem justificar nem hifenizar.
+   No computador (720px ou mais) continuam justificados: veja o bloco @media. */
+p{margin:0 0 1em;text-align:left;-webkit-hyphens:manual;hyphens:manual}
 .hero .nota,.direto,.assina,.salvo,.oab{-webkit-hyphens:manual;hyphens:manual}
 .hero .assina{text-align:left}
 .wrap{max-width:var(--largura);margin:0 auto;padding:0 1.25rem}
@@ -257,6 +259,7 @@ footer{position:relative;overflow:hidden}
 
 @media (min-width:720px){
   body{font-size:1.125rem}
+  p,.criterios dd{text-align:justify;-webkit-hyphens:auto;hyphens:auto}
   .hero h1{font-size:3.4rem}
   h2{font-size:2.3rem}
   .btn{width:auto}
@@ -319,7 +322,6 @@ footer{position:relative;overflow:hidden}
 .cookies .botoes{display:flex;gap:.4rem}
 .cookies .btn{width:auto;min-height:2.6rem;padding:.4rem .8rem;font-size:.9rem}
 .criterios .crit:first-child dt{margin-top:0}
-.criterios dd{text-align:justify;-webkit-hyphens:auto;hyphens:auto}
 .criterios dd a{font-weight:600}
 
 /* Formulário em 3 etapas */
@@ -521,18 +523,12 @@ footer{position:relative;overflow:hidden}
 
       <!-- ETAPA 3 -->
       <div class="etapa-form" id="etapa3" hidden>
-        <h2 id="tit3" tabindex="-1">Seus dados para contato</h2>
+        <h2 id="tit3" tabindex="-1">Para finalizar</h2>
 
         <div class="campo" data-campo="nome">
           <label for="nome">Seu nome</label>
           <input type="text" id="nome" name="nome" autocomplete="name" maxlength="80" required>
           <span class="erro">Informe seu nome.</span>
-        </div>
-
-        <div class="campo" data-campo="whats">
-          <label for="whats">Seu WhatsApp</label>
-          <input type="tel" id="whats" name="whats" autocomplete="tel-national" inputmode="numeric" placeholder="(83) 9 0000-0000" maxlength="17" required>
-          <span class="erro">Informe um número com DDD.</span>
         </div>
 
         <div class="campo consent" data-campo="lgpd">
@@ -794,9 +790,10 @@ footer{position:relative;overflow:hidden}
   /* ---------- EVENTOS (ESPAÇO 4) ----------
      form_start       -> primeira escolha no formulário
      form_step        -> passo concluído (step 1 ou 2, com a situação)
-     generate_lead    -> envio do formulário (WhatsApp ou copiar) = conversão
+     generate_lead    -> envio do formulário (WhatsApp ou copiar) OU toque em qualquer
+                         link do WhatsApp; é o que conta como conversão no Google Ads
      whatsapp_click   -> toque em "Enviar pelo WhatsApp"
-     whatsapp_direto  -> toque no WhatsApp sem preencher o formulário
+     whatsapp_direto  -> toque no WhatsApp sem preencher o formulário (também conta a conversão)
      cta_click        -> toque nos botões que levam ao formulário ou às outras páginas */
   function evento(nome, params){
     params = params || {};
@@ -885,7 +882,8 @@ footer{position:relative;overflow:hidden}
   });
 
   /* ---------- WhatsApp direto (sem formulário) ----------
-     Evento whatsapp_direto no GA4. NÃO conta como conversão no Google Ads.
+     Evento whatsapp_direto no GA4. CONTA como conversão no Google Ads, uma vez
+     por visita (função conversaoLead).
      A mensagem fica escrita no próprio link (não depende de o script abrir
      o WhatsApp): saudação + situação já marcada (se não for tema sensível)
      + origem da visita. */
@@ -906,6 +904,11 @@ footer{position:relative;overflow:hidden}
     a.addEventListener('click', function(){
       evento('whatsapp_direto', { location: a.getAttribute('data-direto'), page: FORM_NAME });
     });
+  });
+  /* Todo link para o WhatsApp (wa.me) conta a conversão, inclusive os criados depois do envio */
+  document.addEventListener('click', function(e){
+    var a = e.target && e.target.closest ? e.target.closest('a[href*="wa.me/"]') : null;
+    if (a) conversaoLead('whatsapp_direto');
   });
 
   /* =====================================================================
@@ -1006,13 +1009,6 @@ footer{position:relative;overflow:hidden}
   function vazia(v){ return !v || !v.length; }
   form.querySelectorAll('input[name="trabalha"]').forEach(function(r){ r.addEventListener('change', ajustarEtapa2); });
 
-  $('whats').addEventListener('input', function(){
-    var d = this.value.replace(/\D/g, '').slice(0, 11), f = d;
-    if (d.length > 2) f = '(' + d.slice(0,2) + ') ' + d.slice(2);
-    if (d.length > 7) f = '(' + d.slice(0,2) + ') ' + (d.length === 11 ? d.slice(2,3) + ' ' + d.slice(3,7) + '-' + d.slice(7) : d.slice(2,6) + '-' + d.slice(6));
-    this.value = f;
-  });
-
   function dados(){
     var s = sitAtual(), resp = {};
     if (s) s.perguntas.forEach(function(p){ resp[p.id] = resposta(p); });
@@ -1022,8 +1018,7 @@ footer{position:relative;overflow:hidden}
       mes: $('mes').value, ano: $('ano').value,
       local: radio('local'),
       resp: resp,
-      nome: $('nome').value.trim(),
-      whats: $('whats').value.trim()
+      nome: $('nome').value.trim()
     };
   }
 
@@ -1045,7 +1040,7 @@ footer{position:relative;overflow:hidden}
       if (!s || s.sensivel) { estado.sit = ''; ls('del', RASCUNHO); return; }
       marcarCartao(); montarEtapa2();
       if (!s.saiu && d.trabalha) { var t = form.querySelector('input[name="trabalha"][value="' + d.trabalha + '"]'); if (t) t.checked = true; }
-      ['mes','ano','nome','whats'].forEach(function(k){ if (d[k]) $(k).value = d[k]; });
+      ['mes','ano','nome'].forEach(function(k){ if (d[k]) $(k).value = d[k]; });
       if (d.local) { var lc = form.querySelector('input[name="local"][value="' + d.local + '"]'); if (lc) lc.checked = true; }
       s.perguntas.forEach(function(p){
         var v = (d.resp || {})[p.id], nome = 'q_' + p.id, tipo = p.tipo || 'opcoes';
@@ -1120,9 +1115,8 @@ footer{position:relative;overflow:hidden}
     return p;
   }
   function pendencias3(){
-    var s = sitAtual(), d = dados(), p = [], dig = d.whats.replace(/\D/g, '');
+    var s = sitAtual(), d = dados(), p = [];
     if (d.nome.length < 2) p.push('nome');
-    if (dig.length !== 10 && dig.length !== 11) p.push('whats');
     if (!$('lgpd').checked) p.push('lgpd');
     if (s && s.sensivel && !$('lgpdSens').checked) p.push('lgpdSens');
     return p;
@@ -1169,8 +1163,7 @@ footer{position:relative;overflow:hidden}
     var s = sitAtual(), d = dados(), saiu = saiuDaEmpresa(), ls_ = saiu ? linhaSaida(d) : null;
     var m = 'Olá, Dr. David! Preenchi o formulário da página do escritório.\n\n' +
       '*Situação:* ' + s.titulo + '\n' +
-      '*Nome:* ' + d.nome + '\n' +
-      '*WhatsApp:* ' + d.whats + '\n';
+      '*Nome:* ' + d.nome + '\n';
     if (!s.saiu) m += '*Ainda trabalha na empresa:* ' + d.trabalha + '\n';
     if (saiu) m += '*Saída:* ' + ls_.txt + '\n';
     m += '*Local do trabalho:* ' + d.local + '\n';

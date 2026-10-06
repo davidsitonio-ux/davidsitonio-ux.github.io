@@ -55,7 +55,7 @@ footer a{color:var(--dourado-claro)}
 
 <main class="wrap">
   <h1>Política de Privacidade</h1>
-  <p class="data">Última atualização: 25 de setembro de 2026</p>
+  <p class="data">Última atualização: 6 de outubro de 2026</p>
 
   <p>Esta política explica, de forma simples, como o escritório David Sitônio Advocacia e Consultoria Jurídica trata os dados pessoais das pessoas que visitam este site e preenchem o formulário, conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018, a LGPD).</p>
 
@@ -65,7 +65,9 @@ footer a{color:var(--dourado-claro)}
 
   <h2>2. Quais dados coletamos</h2>
   <ul>
-    <li><strong>Dados que você informa nos formulários:</strong> nome, número de WhatsApp, data da saída da empresa e respostas sobre a situação do trabalho, conforme a página (por exemplo: motivo alegado para a justa causa, existência de advertências, tipo de saída, carteira assinada e recebimento da rescisão).</li>
+    <li><strong>Dados que você informa nos formulários:</strong> nome, se o trabalho é ou foi na Paraíba ou em outro estado, data (ou mês e ano) da saída da empresa e respostas sobre a situação do trabalho, conforme a página (por exemplo: a situação escolhida, se ainda trabalha na empresa, motivo alegado para a justa causa, existência de advertências, tipo de saída, carteira assinada e recebimento da rescisão).</li>
+    <li><strong>Número de WhatsApp:</strong> os formulários não pedem o seu número. Quando você envia a mensagem ou toca em um botão de WhatsApp e inicia a conversa, o escritório recebe o número usado no envio, como em qualquer conversa do aplicativo.</li>
+    <li><strong>Temas sensíveis:</strong> quando a situação escolhida é assédio ou problema no ambiente de trabalho, acidente ou doença do trabalho, ou demissão durante a gravidez, o formulário pede apenas a categoria, sem detalhes, e só é enviado com uma autorização específica e destacada.</li>
     <li><strong>Respostas do verificador de verbas rescisórias:</strong> os itens que você marca no verificador são processados apenas no seu aparelho. Eles só chegam ao escritório se você enviar o formulário, junto com as demais respostas.</li>
     <li><strong>Informações que você decidir acrescentar</strong> nas conversas com o escritório, que podem incluir dados sensíveis (por exemplo, sobre saúde).</li>
     <li><strong>Origem da visita:</strong> quando você chega por um anúncio ou link, a página identifica a origem (como "google" ou o nome da campanha) e inclui essa informação na mensagem enviada.</li>
@@ -89,7 +91,7 @@ footer a{color:var(--dourado-claro)}
   </ul>
 
   <h2>5. Como os dados chegam ao escritório</h2>
-  <p>Enquanto você preenche o formulário, as respostas ficam guardadas <strong>apenas no seu aparelho</strong> (no armazenamento do navegador), para não se perderem se a conexão cair. Esse rascunho é apagado assim que você envia as respostas e, se não houver envio, expira em 7 dias. A autorização da LGPD não é guardada no rascunho.</p>
+  <p>Enquanto você preenche o formulário, as respostas ficam guardadas <strong>apenas no seu aparelho</strong> (no armazenamento do navegador), para não se perderem se a conexão cair. Esse rascunho é apagado assim que você envia as respostas e, se não houver envio, expira em 7 dias. A autorização da LGPD não é guardada no rascunho. Quando a situação escolhida envolve tema sensível, nenhuma resposta é guardada no aparelho.</p>
   <p>Este site não tem banco de dados. Ao tocar em "Enviar pelo WhatsApp", a mensagem é aberta no seu WhatsApp e só chega ao escritório quando você mesmo(a) a envia. O WhatsApp é um serviço da Meta, sujeito aos termos e à política de privacidade dela.</p>
 
   <h2>6. Por quanto tempo guardamos</h2>
@@ -98,6 +100,7 @@ footer a{color:var(--dourado-claro)}
 
   <h2 id="cookies">7. Cookies e ferramentas de medição</h2>
   <p>Esta página pode usar o Google Analytics, o Google Ads e o Pixel da Meta para medir visitas e o resultado dos anúncios. Essas ferramentas só usam cookies depois que você toca em "Aceitar" no aviso de cookies.</p>
+  <p>Quando a situação escolhida no formulário envolve tema sensível, ela não é identificada nessas ferramentas de medição.</p>
   <p>Se você recusar, o Pixel da Meta não é carregado e as ferramentas do Google funcionam no modo sem cookies, enviando apenas sinais básicos e sem identificadores, que não permitem saber quem você é.</p>
   <p>Essas empresas podem processar dados fora do Brasil, conforme as regras de transferência internacional da LGPD (art. 33). O site é hospedado no GitHub Pages, que registra dados técnicos de acesso (como o endereço IP) para funcionamento e segurança.</p>
   <p>Você pode mudar sua escolha a qualquer momento:</p>
@@ -141,6 +144,7 @@ document.getElementById('apagarPref').addEventListener('click', function(){
     localStorage.removeItem('ds_consent');
     localStorage.removeItem('ds_jc_rascunho');
     localStorage.removeItem('ds_rc_rascunho');
+    localStorage.removeItem('ds_ge_rascunho');
     sessionStorage.removeItem('ds_utm');
   } catch(e){}
   document.getElementById('okPref').style.display = 'block';

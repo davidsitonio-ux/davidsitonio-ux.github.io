@@ -108,7 +108,9 @@ a{color:var(--dourado-texto)}
 h1,h2,h3{font-family:var(--serif);font-weight:600;line-height:1.15;margin:0 0 .6em;color:var(--grafite)}
 h2{font-size:1.9rem}
 h3{font-size:1.3rem}
-p{margin:0 0 1em;text-align:justify;-webkit-hyphens:auto;hyphens:auto}
+/* No celular, parágrafos alinhados à esquerda, sem justificar nem hifenizar.
+   No computador (720px ou mais) continuam justificados: veja o bloco @media. */
+p{margin:0 0 1em;text-align:left;-webkit-hyphens:manual;hyphens:manual}
 .hero .nota,.direto,.assina,.salvo,.oab{-webkit-hyphens:manual;hyphens:manual}
 .hero .assina{text-align:left}
 .wrap{max-width:var(--largura);margin:0 auto;padding:0 1.25rem}
@@ -253,16 +255,31 @@ footer{position:relative;overflow:hidden}
 .btn-wa-sq svg{width:26px;height:26px}
 .direto{font-size:.95rem;margin:1rem 0 0;text-align:center}
 .direto a{font-weight:600}
-.cookies{position:fixed;left:.75rem;right:.75rem;bottom:calc(.75rem + env(safe-area-inset-bottom,0px));z-index:30;background:var(--branco);
-  border:1px solid var(--linha);border-radius:10px;padding:1rem;box-shadow:0 6px 24px rgba(0,0,0,.18);font-size:.9rem;max-width:34rem;margin:0 auto;display:none}
-.cookies.mostrar{display:block}
-.cookies p{margin:0 0 .8rem}
-.cookies .botoes{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
-.cookies .btn{min-height:2.75rem;font-size:.95rem;padding:.5rem}
+/* Aviso de cookies em faixa baixa (mesmo padrão da página inicial):
+   não cobre nenhum botão da primeira tela. */
+.cookies{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--branco);border-top:1px solid var(--linha);
+  padding:.55rem .9rem calc(.55rem + env(safe-area-inset-bottom,0px));box-shadow:0 -4px 18px rgba(0,0,0,.14);display:none}
+.cookies.mostrar{display:grid;grid-template-columns:1fr auto;gap:.7rem;align-items:center}
+.cookies p{font-size:.82rem;line-height:1.35;margin:0;text-align:left;-webkit-hyphens:manual;hyphens:manual}
+.cookies .botoes{display:flex;gap:.4rem}
+.cookies .btn{width:auto;min-height:2.6rem;padding:.4rem .8rem;font-size:.9rem}
+/* Primeira tela: dois botões lado a lado, com o mesmo destaque, logo abaixo do
+   título. Assim ficam visíveis em qualquer celular, com ou sem o aviso de cookies. */
+.hero-acoes{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:1.1rem}
+.hero .sub{margin-top:1.3rem}
+.hero .hero-acoes .btn{margin-top:0;padding:.6rem .55rem;font-size:.98rem;line-height:1.2}
+.hero-acoes .seta{display:none}
+/* Botão de reserva depois do envio, se o WhatsApp não abrir sozinho */
+.aviso-ok .abrir-wa{display:flex;width:100%;margin:.8rem 0 .5rem;color:#1F1F1F;text-decoration:none}
 @media (prefers-reduced-motion:reduce){.barra{transition:none}}
 
 @media (min-width:720px){
   body{font-size:1.125rem}
+  p{text-align:justify;-webkit-hyphens:auto;hyphens:auto}
+  .cookies.mostrar{grid-template-columns:auto auto;justify-content:center}
+  .hero-acoes{display:flex;flex-wrap:wrap;gap:.8rem}
+  .hero .hero-acoes .btn{padding:.8rem .9rem;font-size:1rem}
+  .hero-acoes .seta{display:block}
   .hero h1{font-size:3.4rem}
   h2{font-size:2.3rem}
   .btn{width:auto}
@@ -291,9 +308,12 @@ footer{position:relative;overflow:hidden}
       <div class="marca-nome">David Sitônio<small>ADVOCACIA TRABALHISTA</small></div>
     </div>
     <h1>Demitido(a) por justa causa? <span class="h-ouro">Entenda seus direitos.</span></h1>
+    <div class="hero-acoes">
+      <a class="btn" href="#formulario" data-cta="topo">Enviar meu caso para análise <svg class="seta" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="btn btn-wa" href="https://wa.me/5583996451913?text=Ol%C3%A1!%20Fui%20demitido(a)%20por%20justa%20causa%20e%20gostaria%20de%20uma%20an%C3%A1lise%20do%20meu%20caso." data-direto="topo"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.8-1.2.2-.6.2-1.1.1-1.2l-.5-.2Z"/></svg>Falar pelo WhatsApp</a>
+    </div>
+    <p class="nota">São só 3 perguntas, menos de 1 minuto. Suas informações são confidenciais.</p>
     <p class="sub">A justa causa é a punição mais grave do contrato de trabalho, e a lei exige motivo sério e comprovado. Veja o que ela muda na rescisão, quando pode ser questionada e como enviar seu caso para análise.</p>
-    <a class="btn" href="#formulario" data-cta="topo">Enviar meu caso para análise <svg class="seta" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-    <p class="nota">Leva cerca de 2 minutos. Suas informações são confidenciais.</p>
     <p class="assina"><span class="foto avatar" aria-hidden="true"></span><span>Por David Sitônio, advogado com atuação trabalhista, OAB/PB 13.937. Atendimento on-line em toda a Paraíba.</span></p>
   </div>
 </header>
@@ -386,7 +406,7 @@ footer{position:relative;overflow:hidden}
 <section class="form-sec" id="formulario">
   <div class="wrap">
     <h2>Envie as informações do seu caso</h2>
-    <p>São 6 perguntas rápidas. Responda o que souber. Se tiver dúvida, marque "não sei".</p>
+    <p>São só 3 perguntas: seu nome, a data da demissão e o motivo alegado. O restante o advogado pergunta na conversa.</p>
 
     <form class="cartao" id="form" novalidate autocomplete="on">
       <div class="recuperado" id="recuperado">
@@ -398,12 +418,6 @@ footer{position:relative;overflow:hidden}
         <label for="nome">Seu nome</label>
         <input type="text" id="nome" name="nome" autocomplete="name" maxlength="80" required>
         <span class="erro">Informe seu nome.</span>
-      </div>
-
-      <div class="campo" data-campo="whats">
-        <label for="whats">Seu WhatsApp</label>
-        <input type="tel" id="whats" name="whats" autocomplete="tel-national" inputmode="numeric" placeholder="(83) 9 0000-0000" maxlength="17" required>
-        <span class="erro">Informe um número com DDD.</span>
       </div>
 
       <div class="campo" data-campo="data">
@@ -435,27 +449,6 @@ footer{position:relative;overflow:hidden}
         <span class="erro">Escolha o motivo alegado (ou descreva, se for outro).</span>
       </div>
 
-      <fieldset class="campo" data-campo="advertencias">
-        <legend>Você recebeu advertências ou suspensões antes?</legend>
-        <div class="opcoes">
-          <label><input type="radio" name="advertencias" value="Sim"><span>Sim</span></label>
-          <label><input type="radio" name="advertencias" value="Não"><span>Não</span></label>
-          <label><input type="radio" name="advertencias" value="Não sei"><span>Não sei</span></label>
-        </div>
-        <span class="erro">Escolha uma opção.</span>
-      </fieldset>
-
-      <fieldset class="campo" data-campo="tempo">
-        <legend>Quanto tempo passou entre o fato e a demissão?</legend>
-        <div class="opcoes">
-          <label><input type="radio" name="tempo" value="Poucos dias"><span>Poucos dias</span></label>
-          <label><input type="radio" name="tempo" value="Algumas semanas"><span>Algumas semanas</span></label>
-          <label><input type="radio" name="tempo" value="Meses"><span>Meses</span></label>
-          <label><input type="radio" name="tempo" value="Não sei"><span>Não sei</span></label>
-        </div>
-        <span class="erro">Escolha uma opção.</span>
-      </fieldset>
-
       <div class="campo consent" data-campo="lgpd">
         <label>
           <input type="checkbox" id="lgpd" name="lgpd">
@@ -474,7 +467,7 @@ footer{position:relative;overflow:hidden}
 
       <div class="aviso-ok" id="avisoOk" role="status" aria-live="polite"></div>
 
-      <p class="direto">Prefere conversar direto? <a href="https://wa.me/5583996451913" data-direto="formulario">Fale com o advogado pelo WhatsApp</a>.</p>
+      <p class="direto">Prefere conversar direto? <a href="https://wa.me/5583996451913?text=Ol%C3%A1!%20Fui%20demitido(a)%20por%20justa%20causa%20e%20gostaria%20de%20uma%20an%C3%A1lise%20do%20meu%20caso." data-direto="formulario">Fale com o advogado pelo WhatsApp</a>.</p>
 
       <p class="salvo">Enquanto você preenche, as respostas ficam guardadas só neste aparelho, para não se perderem se a conexão cair. Elas são apagadas depois do envio.</p>
     </form>
@@ -520,7 +513,7 @@ footer{position:relative;overflow:hidden}
       <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 13h18"/></svg><span>David Sitônio Advocacia e Consultoria Jurídica</span></li>
       <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span>David Xavier Sitônio Lucena, OAB/PB 13.937</span></li>
       <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg><span>João Pessoa/PB · atendimento on-line em toda a Paraíba</span></li>
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg><a href="https://wa.me/5583996451913" data-direto="rodape">(83) 99645-1913</a></li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg><a href="https://wa.me/5583996451913?text=Ol%C3%A1!%20Fui%20demitido(a)%20por%20justa%20causa%20e%20gostaria%20de%20uma%20an%C3%A1lise%20do%20meu%20caso." data-direto="rodape">(83) 99645-1913</a></li>
       <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><a href="mailto:david_sitonio@hotmail.com">david_sitonio@hotmail.com</a></li>
       <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg><span><a href="privacidade.html">Política de Privacidade</a><span class="sep">|</span><a href="#" id="revCookies">Preferências de cookies</a></span></li>
     </ul>
@@ -532,13 +525,13 @@ footer{position:relative;overflow:hidden}
 <div class="barra" id="barra" aria-hidden="true">
   <div class="barra-in">
     <a class="btn" href="#formulario" data-cta="barra" tabindex="-1">Enviar meu caso para análise <svg class="seta" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-    <a class="btn-wa-sq" href="https://wa.me/5583996451913" data-direto="barra" tabindex="-1" aria-label="Falar direto com o advogado pelo WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.8-1.2.2-.6.2-1.1.1-1.2l-.5-.2Z"/></svg></a>
+    <a class="btn-wa-sq" href="https://wa.me/5583996451913?text=Ol%C3%A1!%20Fui%20demitido(a)%20por%20justa%20causa%20e%20gostaria%20de%20uma%20an%C3%A1lise%20do%20meu%20caso." data-direto="barra" tabindex="-1" aria-label="Falar direto com o advogado pelo WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.8-1.2.2-.6.2-1.1.1-1.2l-.5-.2Z"/></svg></a>
   </div>
 </div>
 
 <!-- Aviso de cookies -->
 <div class="cookies" id="cookies" role="dialog" aria-label="Aviso de cookies">
-  <p>Usamos cookies de medição (Google e Meta) para entender o desempenho desta página. Você pode aceitar ou recusar. <a href="privacidade.html#cookies">Saiba mais</a></p>
+  <p>Usamos cookies de medição (Google e Meta). <a href="privacidade.html#cookies">Saiba mais</a></p>
   <div class="botoes">
     <button type="button" class="btn btn-sec" id="ckRecusar">Recusar</button>
     <button type="button" class="btn" id="ckAceitar">Aceitar</button>
@@ -557,8 +550,10 @@ footer{position:relative;overflow:hidden}
   function ls(op, k, v){ try { return op === 'get' ? localStorage.getItem(k) : op === 'set' ? localStorage.setItem(k, v) : localStorage.removeItem(k); } catch(e){ return null; } }
 
   /* ---------- EVENTOS DE CONVERSÃO (ESPAÇO 4) ----------
-     generate_lead  -> envio do formulário (WhatsApp ou copiar)
-     whatsapp_click -> toque em "Enviar pelo WhatsApp" ou no WhatsApp do rodapé
+     generate_lead   -> envio do formulário (WhatsApp ou copiar) OU toque em qualquer
+                        link do WhatsApp; é o que conta como conversão no Google Ads
+     whatsapp_click  -> toque em "Enviar pelo WhatsApp"
+     whatsapp_direto -> toque em "Falar pelo WhatsApp" (topo, barra, formulário, rodapé)
      form_start     -> primeira interação com o formulário
      cta_click      -> toque nos botões que levam ao formulário            */
   function evento(nome, params){
@@ -610,8 +605,14 @@ footer{position:relative;overflow:hidden}
 
   /* ---------- Barra fixa no celular ---------- */
   var barra = $('barra'), barraVisivel = false, heroVisivel = true, formVisivel = false;
+  /* A barra não se esconde mais quando o aviso de cookies está aberto:
+     ela sobe e fica logo acima dele (como o botão flutuante da página inicial). */
+  function posicionarBarra(){
+    barra.style.bottom = ck.classList.contains('mostrar') ? ck.offsetHeight + 'px' : '';
+  }
   function atualizarBarra(){
-    var mostrar = !heroVisivel && !formVisivel && !ck.classList.contains('mostrar');
+    posicionarBarra();
+    var mostrar = !heroVisivel && !formVisivel;
     if (mostrar === barraVisivel) return;   // evita repintar sem necessidade
     barraVisivel = mostrar;
     requestAnimationFrame(function(){
@@ -625,6 +626,8 @@ footer{position:relative;overflow:hidden}
     new IntersectionObserver(function(en){ formVisivel = en[0].isIntersecting; atualizarBarra(); }, { rootMargin: '0px 0px -30% 0px' })
       .observe($('formulario'));
   }
+  window.addEventListener('resize', posicionarBarra);
+  posicionarBarra();
   document.querySelectorAll('[data-cta]').forEach(function(a){
     a.addEventListener('click', function(){ evento('cta_click', { location: a.getAttribute('data-cta') }); });
   });
@@ -633,19 +636,31 @@ footer{position:relative;overflow:hidden}
   });
 
   /* ---------- WhatsApp direto (sem formulário) ----------
-     Evento whatsapp_direto no GA4. NÃO conta como conversão no Google Ads. */
+     O endereço do WhatsApp fica escrito no próprio link (href real), já com a
+     mensagem e a origem da visita: o toque abre o WhatsApp sem depender de script.
+     Cada toque registra o evento whatsapp_direto no GA4 e CONTA como conversão
+     no Google Ads (uma vez por visita, pela função conversaoLead). */
+  var MSG_DIRETA = 'Olá! Fui demitido(a) por justa causa e gostaria de uma análise do meu caso.';
+  function origem(){
+    return utm.utm_source
+      ? [utm.utm_source, utm.utm_medium, utm.utm_campaign].filter(Boolean).join(' / ') + (utm.utm_term ? ' (termo: ' + utm.utm_term + ')' : '')
+      : 'acesso direto';
+  }
+  function atualizarDiretos(){
+    var url = 'https://wa.me/' + CONFIG.whatsapp + '?text=' + encodeURIComponent(MSG_DIRETA + '\n\n_Origem: ' + origem() + '_');
+    document.querySelectorAll('[data-direto]').forEach(function(a){ a.href = url; });
+  }
   document.querySelectorAll('[data-direto]').forEach(function(a){
-    a.addEventListener('click', function(e){
-      e.preventDefault();
+    a.addEventListener('click', function(){
       evento('whatsapp_direto', { location: a.getAttribute('data-direto'), page: 'justa_causa' });
-      var origem = utm.utm_source
-        ? [utm.utm_source, utm.utm_medium, utm.utm_campaign].filter(Boolean).join(' / ') + (utm.utm_term ? ' (termo: ' + utm.utm_term + ')' : '')
-        : 'acesso direto';
-      var msg = 'Olá, Dr. David! Vim pela página sobre justa causa e prefiro conversar direto.\n\n_Origem: ' + origem + '_';
-      var url = 'https://wa.me/' + CONFIG.whatsapp + '?text=' + encodeURIComponent(msg);
-      setTimeout(function(){ window.location.href = url; }, 300);
     });
   });
+  /* Todo link para o WhatsApp (wa.me) conta a conversão, inclusive os criados depois do envio */
+  document.addEventListener('click', function(e){
+    var a = e.target && e.target.closest ? e.target.closest('a[href*="wa.me/"]') : null;
+    if (a) conversaoLead('whatsapp_direto');
+  });
+  atualizarDiretos();
 
   /* ---------- Campos ---------- */
   var hoje = new Date();
@@ -668,27 +683,15 @@ footer{position:relative;overflow:hidden}
   }
   function deIso(v){ var p = (v || '').split('-'); return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : ''; }
 
-  $('whats').addEventListener('input', function(){
-    var d = this.value.replace(/\D/g, '').slice(0, 11), f = d;
-    if (d.length > 2) f = '(' + d.slice(0,2) + ') ' + d.slice(2);
-    if (d.length > 7) f = '(' + d.slice(0,2) + ') ' + (d.length === 11 ? d.slice(2,3) + ' ' + d.slice(3,7) + '-' + d.slice(7) : d.slice(2,6) + '-' + d.slice(6));
-    this.value = f;
-  });
-
   function toggleOutro(){ $('outroBox').hidden = $('motivo').value !== 'Outro'; }
   $('motivo').addEventListener('change', toggleOutro);
-
-  function radio(nome){ var r = form.querySelector('input[name="' + nome + '"]:checked'); return r ? r.value : ''; }
 
   function dados(){
     return {
       nome: $('nome').value.trim(),
-      whats: $('whats').value.trim(),
       data: paraIso($('data').value),
       motivo: $('motivo').value,
-      motivoOutro: $('motivoOutro').value.trim(),
-      advertencias: radio('advertencias'),
-      tempo: radio('tempo')
+      motivoOutro: $('motivoOutro').value.trim()
     };
   }
 
@@ -703,10 +706,7 @@ footer{position:relative;overflow:hidden}
       var r = JSON.parse(bruto);
       if (!r.t || Date.now() - r.t > VALIDADE) { ls('del', RASCUNHO); return; }
       var d = r.d || {}, algo = false;
-      ['nome','whats','data','motivo','motivoOutro'].forEach(function(k){ if (d[k]) { $(k).value = k === 'data' ? deIso(d[k]) : d[k]; algo = true; } });
-      ['advertencias','tempo'].forEach(function(k){
-        if (d[k]) { var el = form.querySelector('input[name="' + k + '"][value="' + d[k] + '"]'); if (el) { el.checked = true; algo = true; } }
-      });
+      ['nome','data','motivo','motivoOutro'].forEach(function(k){ if (d[k]) { $(k).value = k === 'data' ? deIso(d[k]) : d[k]; algo = true; } });
       toggleOutro();
       if (algo) $('recuperado').style.display = 'block';
     } catch(e){ ls('del', RASCUNHO); }
@@ -728,12 +728,8 @@ footer{position:relative;overflow:hidden}
     var d = dados(), ok = true, primeiro = null;
     function chk(campo, cond){ if (!marcar(campo, cond)) { ok = false; if (!primeiro) primeiro = campo; } }
     chk('nome', d.nome.length >= 2);
-    var dig = d.whats.replace(/\D/g, '');
-    chk('whats', dig.length === 10 || dig.length === 11);
     chk('data', !!d.data && d.data <= iso(new Date()) && d.data >= DATA_MIN);
     chk('motivo', !!d.motivo && (d.motivo !== 'Outro' || d.motivoOutro.length >= 3));
-    chk('advertencias', !!d.advertencias);
-    chk('tempo', !!d.tempo);
     chk('lgpd', $('lgpd').checked);
     if (primeiro) {
       var alvo = form.querySelector('[data-campo="' + primeiro + '"]');
@@ -758,25 +754,26 @@ footer{position:relative;overflow:hidden}
   function montarMensagem(){
     var d = dados(), p = d.data.split('-');
     var motivo = d.motivo === 'Outro' ? 'Outro: ' + d.motivoOutro : d.motivo;
-    var origem = utm.utm_source
-      ? [utm.utm_source, utm.utm_medium, utm.utm_campaign].filter(Boolean).join(' / ') + (utm.utm_term ? ' (termo: ' + utm.utm_term + ')' : '')
-      : 'acesso direto';
     return 'Olá, Dr. David! Preenchi o formulário da página sobre justa causa.\n\n' +
       '*Nome:* ' + d.nome + '\n' +
-      '*WhatsApp:* ' + d.whats + '\n' +
       '*Data da demissão:* ' + p[2] + '/' + p[1] + '/' + p[0] + ' (' + tempoDesde(d.data) + ')\n' +
       '*Motivo alegado pela empresa:* ' + motivo + '\n' +
-      '*Advertências ou suspensões antes:* ' + d.advertencias + '\n' +
-      '*Tempo entre o fato e a demissão:* ' + d.tempo + '\n' +
       '*Autorização LGPD:* sim\n\n' +
-      '_Origem: ' + origem + '_';
+      '_Origem: ' + origem() + '_';
   }
 
-  function concluir(texto){
+  function concluir(texto, url){
     ls('del', RASCUNHO); // apaga do aparelho após o envio
     $('recuperado').style.display = 'none';
     var av = $('avisoOk');
-    av.innerHTML = texto + '<br><button type="button" id="apagarTela">Apagar as respostas desta tela</button>';
+    /* Botão de reserva: se o WhatsApp não abrir sozinho (alguns navegadores
+       bloqueiam a abertura automática), a pessoa toca aqui. É um link real. */
+    av.innerHTML = texto + (url ? '<a class="btn btn-wa abrir-wa" id="abrirWa" target="_blank" rel="noopener">Abrir o WhatsApp</a>' : '<br>') +
+      '<button type="button" id="apagarTela">Apagar as respostas desta tela</button>';
+    if (url) {
+      $('abrirWa').href = url;
+      $('abrirWa').addEventListener('click', function(){ evento('whatsapp_click', { location: 'formulario_reabrir' }); });
+    }
     av.classList.add('mostrar');
     $('apagarTela').addEventListener('click', function(){ limparTudo(); av.classList.remove('mostrar'); });
   }
@@ -788,8 +785,8 @@ footer{position:relative;overflow:hidden}
     var msg = montarMensagem();
     conversaoLead('whatsapp');
     evento('whatsapp_click', { location: 'formulario' });
-    concluir('Mensagem pronta. No WhatsApp, é só tocar em enviar. Se o WhatsApp não abriu, toque em "Copiar respostas" e cole na conversa com (83) 99645-1913.');
     var url = 'https://wa.me/' + CONFIG.whatsapp + '?text=' + encodeURIComponent(msg);
+    concluir('Mensagem pronta. No WhatsApp, é só tocar em enviar. Se o WhatsApp não abrir sozinho, toque no botão abaixo.', url);
     setTimeout(function(){ window.location.href = url; }, 400); // pequena pausa para registrar a conversão
   });
 
